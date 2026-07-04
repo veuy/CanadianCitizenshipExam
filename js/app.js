@@ -6,6 +6,8 @@ let score = 0;
 let mockExamQuestions = [];
 let mockExamAnswers = [];
 let mockExamCurrentIndex = 0;
+let mockExamTimer = null;
+let mockExamTimeLeft = 0;
 
 function renderScreen() {
   if (currentScreen === 'dashboard') {
@@ -159,6 +161,52 @@ function nextAllQuestion() {
         });
     }
 }
+
+function startMockExamTimer() {
+    mockExamTimeLeft = 45 * 60; // 45 minutes in seconds
+    updateTimerDisplay();
+
+    mockExamTimer = setInterval(() => {
+        mockExamTimeLeft--;
+        updateTimerDisplay();
+
+        if (mockExamTimeLeft <= 0) {
+            clearInterval(mockExamTimer);
+            mockExamTimer = null;
+            // Time's up — auto submit
+            currentScreen = 'mockExamResults';
+            renderScreen();
+        }
+    }, 1000);
+}
+
+function stopMockExamTimer() {
+    if (mockExamTimer) {
+        clearInterval(mockExamTimer);
+        mockExamTimer = null;
+    }
+}
+
+function updateTimerDisplay() {
+    const timerEl = document.getElementById('mock-timer');
+    if (!timerEl) return;
+
+    const minutes = Math.floor(mockExamTimeLeft / 60);
+    const seconds = mockExamTimeLeft % 60;
+    const display = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    timerEl.textContent = display;
+
+    // Remove old warning classes
+    timerEl.classList.remove('timer-warning', 'timer-danger');
+
+    // Add warning colors based on time left
+    if (mockExamTimeLeft <= 300) {        // Under 5 minutes
+        timerEl.classList.add('timer-danger');
+    } else if (mockExamTimeLeft <= 600) { // Under 10 minutes
+        timerEl.classList.add('timer-warning');
+    }
+}
+
 function setupMockExam() {
     // Copy and shuffle the full question pool, take 20
     const shuffled = [...questions];
@@ -169,12 +217,16 @@ function setupMockExam() {
     mockExamQuestions = shuffled.slice(0, 20);
     mockExamAnswers = [];
     mockExamCurrentIndex = 0;
+    startMockExamTimer();
 }
 
 function showMockExamQuestion() {
     const question = mockExamQuestions[mockExamCurrentIndex];
     const app = document.getElementById('app');
     const total = 20;
+    const timerMinutes = Math.floor(mockExamTimeLeft / 60);
+    const timerSeconds = mockExamTimeLeft % 60;
+    const timerDisplay = `${timerMinutes}:${timerSeconds.toString().padStart(2, '0')}`;
 
     // Check if this question has already been answered
     const existingAnswer = mockExamAnswers.find(
@@ -218,6 +270,7 @@ function showMockExamQuestion() {
         <div class="nav-bar">
             <button class="home-btn" id="btn-home-mock">🏠 Home</button>
             <span class="nav-title">Mock Exam</span>
+            <span class="mock-timer" id="mock-timer">${timerDisplay}</span>
         </div>
         <p class="progress">Question ${mockExamCurrentIndex + 1} of ${total}</p>
         <p class="question-text">${question.question}</p>
@@ -235,6 +288,7 @@ function showMockExamQuestion() {
     // Home button
     document.getElementById('btn-home-mock').addEventListener('click', () => {
         if (confirm('Leave the exam? Your answers will be lost.')) {
+            stopMockExamTimer();
             currentScreen = 'dashboard';
             renderScreen();
         }
@@ -268,6 +322,7 @@ function showMockExamQuestion() {
             }
         });
     }
+    updateTimerDisplay();
 }
 
 function handleMockExamAnswer(event) {
@@ -298,9 +353,11 @@ function handleMockExamAnswer(event) {
 }
 
 function showMockExamEnd() {
+    stopMockExamTimer();
     const answeredCount = mockExamAnswers.length;
     const unanswered = 20 - answeredCount;
     const app = document.getElementById('app');
+    
 
     app.innerHTML = `
         <div class="nav-bar">
@@ -408,7 +465,9 @@ function showMockExamReview() {
 }
 
 function showMockExamResults() {
+    stopMockExamTimer();
     const app = document.getElementById('app');
+    
 
     let correctCount = 0;
     for (let i = 0; i < mockExamAnswers.length; i++) {

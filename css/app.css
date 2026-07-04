@@ -385,3 +385,27 @@ h1 {
     gap: 10px;
     margin-top: 20px;
 }
+
+/* ──────── TIMER ──────── */
+
+.mock-timer {
+    margin-left: auto;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    font-variant-numeric: tabular-nums;
+}
+
+.timer-warning {
+    color: #e65100 !important;
+}
+
+.timer-danger {
+    color: #c00 !important;
+    animation: timer-blink 1s infinite;
+}
+
+@keyframes timer-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
