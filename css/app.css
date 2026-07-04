@@ -94,3 +94,294 @@ h1 {
   cursor: not-allowed;
   opacity: 0.8;
 }
+
+.nav-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.nav-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #c00;
+}
+
+.home-btn {
+    background: #f0f0f0;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.home-btn:hover {
+    background: #e0e0e0;
+}
+
+/* ──────── DASHBOARD ──────── */
+
+.dashboard {
+    text-align: center;
+}
+
+.dashboard h2 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.dashboard-subtitle {
+    color: #666;
+    margin-bottom: 24px;
+}
+
+.dashboard-btn {
+    background: #c00;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 16px 32px;
+    font-size: 18px;
+    cursor: pointer;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 6px;
+}
+
+.dashboard-btn:hover {
+    background: #900;
+}
+
+.dashboard-desc {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 20px;
+}
+
+/* ──────── RESULTS ──────── */
+
+.results-title {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.results-text {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.results-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+.mock-end {
+    text-align: center;
+}
+
+.mock-end h2 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 12px;
+}
+
+.mock-end-text {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 6px;
+}
+
+.mock-end-hint {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 24px;
+}
+
+.mock-end-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* ──────── REVIEW CARDS ──────── */
+
+.review-card {
+    background: #fafafa;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 14px;
+    margin-bottom: 12px;
+}
+
+.review-q-number {
+    font-size: 13px;
+    font-weight: bold;
+    color: #c00;
+    margin-bottom: 4px;
+}
+
+.review-q-text {
+    font-size: 15px;
+    color: #333;
+    margin-bottom: 6px;
+    line-height: 1.4;
+}
+
+.review-your-answer {
+    font-size: 14px;
+    color: #666;
+    font-style: italic;
+}
+
+.review-hint {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.not-answered {
+    color: #999;
+}
+
+/* ──────── RESULTS ──────── */
+
+.result-correct {
+    border-left: 4px solid #8bc34a;
+}
+
+.result-wrong {
+    border-left: 4px solid #f44336;
+}
+
+.result-correct-answer {
+    font-size: 14px;
+    color: #2e7d32;
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.result-explanation {
+    font-size: 13px;
+    color: #777;
+    margin-top: 4px;
+    line-height: 1.4;
+}
+
+.mock-nav {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.mock-nav-btn {
+    flex: 1;
+    background: #f0f0f0;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.mock-nav-btn:hover {
+    background: #e0e0e0;
+}
+
+.mock-finish-btn {
+    background: #c00;
+    color: white;
+    border-color: #c00;
+}
+
+.mock-finish-btn:hover {
+    background: #900;
+}
+
+.mock-answered-count {
+    margin-top: 12px;
+    font-size: 13px;
+    color: #888;
+    text-align: center;
+}
+
+/* ──────── SELECTED ANSWER HIGHLIGHT ──────── */
+
+.selected-answer {
+    background: #bbdefb !important;
+    border-color: #1976d2 !important;
+}
+
+/* ──────── MOCK EXAM END ──────── */
+
+.mock-end {
+    text-align: center;
+}
+
+.mock-end h2 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 12px;
+}
+
+.mock-end-text {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 6px;
+}
+
+.mock-end-warning {
+    font-size: 15px;
+    color: #e65100;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.mock-end-hint {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 24px;
+}
+
+.mock-end-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* ──────── REVIEW ──────── */
+
+.review-edit-btn {
+    background: none;
+    border: 1px solid #c00;
+    color: #c00;
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 13px;
+    cursor: pointer;
+    margin-top: 6px;
+}
+
+.review-edit-btn:hover {
+    background: #c00;
+    color: white;
+}
+
+.review-bottom-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
