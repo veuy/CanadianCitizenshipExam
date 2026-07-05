@@ -1,0 +1,21 @@
+{
+    "name": "Canadian Citizenship Exam",
+    "short_name": "Citizenship Exam",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#f5f5f5",
+    "theme_color": "#c00",
+    "description": "Practice for the Canadian Citizenship Exam with 200 questions and a mock exam mode.",
+    "icons": [
+        {
+            "src": "icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

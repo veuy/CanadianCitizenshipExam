@@ -1,0 +1,25 @@
+{
+  "name": "canadiancitizenshipexam",
+  "version": "1.0.0",
+  "description": "A fully offline, mobile-friendly practice quiz app for the Canadian Citizenship Exam. Built with vanilla JavaScript to learn the language from scratch.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/veuy/CanadianCitizenshipExam.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/veuy/CanadianCitizenshipExam/issues"
+  },
+  "homepage": "https://github.com/veuy/CanadianCitizenshipExam#readme",
+  "devDependencies": {
+    "vite": "^8.1.3"
+  }
+}
