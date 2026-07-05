@@ -1,76 +1,98 @@
-```markdown
-# Canadian Citizenship Exam
+# 🇨🇦 Canadian Citizenship Exam
 
-**Try it here:** [canadiancitizenshipexam.netlify.app](https://canadiancitizenshipexam.netlify.app)
+**Live Demo:** [canadiancitizenshipexam.netlify.app](https://canadiancitizenshipexam.netlify.app)
 
-A study tool for the Canadian citizenship test. I built this while learning JavaScript from scratch.
-
----
-
-## What it does
-
-200 questions covering Canadian history, government, geography, and culture.
-
-Two ways to study:
-
-- **All Questions** — practice all 200 with instant feedback and explanations
-- **Mock Exam** — simulates the real test with 20 random questions, no feedback until you submit, and a 45-minute timer. Pass mark is 15/20 (75%)
-
-Works offline and installs to your phone's home screen like a normal app.
+A lightweight study tool for preparing for the **Canadian citizenship test**. Built while learning **JavaScript from scratch** — no frameworks, just fundamentals.
 
 ---
 
-## How to run locally
+## 📘 Features
 
-```
+### **200 Official-Style Questions**
+
+Covers:
+
+* Canadian history
+* Government & politics
+* Geography
+* Culture & symbols
+
+### **Study Modes**
+
+#### **All Questions**
+
+Practice all **200 questions** with:
+
+* Instant feedback
+* Explanations for each answer
+
+#### **Mock Exam**
+
+Simulate the real test experience with:
+
+* **20 random questions**
+* **No feedback until submission**
+* **45-minute timer**
+* **Pass mark: 15/20 (75%)**
+
+### **PWA Support**
+
+* Works offline
+* Installable to your home screen like a native app
+
+---
+
+## 🛠️ Running Locally
+
+```bash
 npm install
-npm run dev        # dev server with hot reload
-npm run build      # production build
-npm run preview    # preview the build
+npm run dev
+npm run build
+npm run preview
 ```
 
-Or just open `index.html` in a browser.
+You can also simply open `index.html` in your browser.
 
 ---
 
-## How it's built
+## 🧱 Tech Stack
 
-Plain HTML, CSS, and JavaScript — no frameworks. I built this to learn JS before moving on to anything else.
+Built with **HTML, CSS, and JavaScript** to focus on learning the fundamentals.
 
-- **Vite** for dev server and production builds
-- **Service worker + web manifest** for offline support and PWA install
-- **Netlify** for hosting — auto deploys when I push to GitHub
+### **Tools Used**
 
----
-
-## Roadmap
-
-Stuff I want to add as I keep learning:
-
-### Next up
-- **Wrong answer review** — redo only the questions you got wrong so you focus on weak spots
-- **Save progress** — remember where you left off and past scores using localStorage
-- **Question bookmarking** — star a question and come back to it later
-
-### Soon after
-- **Category filters** — pick a topic (history, government, geography) and study just that
-- **Progress bar** — visual bar showing how far through the questions you are
-- **Dark mode** — toggle for studying at night
-- **Multiple choice shuffle** — randomize the answer order so it's not predictable
-
-### Eventually
-- **Stats dashboard** — track mock exam scores over time to see improvement
-- **Keyboard shortcuts** — press 1-4 to pick answers, Enter for next
-- **Sound effects** — subtle feedback when you get an answer right or wrong
-- **Swipe navigation** — swipe between questions on mobile
-- **Custom quiz length** — pick how many questions you want (10, 20, 50, all 200)
-- **Unit tests** — write tests for the quiz logic and shuffle function
+* **Vite** — development server + production builds
+* **Service Worker + Web Manifest** — offline support + PWA installation
+* **Netlify** — hosting with automatic deploys on Git push
 
 ---
 
-## Why I built this
+## 🚀 Roadmap
 
-I built this for personal since I am taking my Canadian citizenship exam soon, I also wanted to learn JavaScript by building something real. Turned into an actual app I use to study and can learn from the process.
-```
+### 🔹 Next Up
+
+* Wrong-answer review mode
+* Save progress with `localStorage`
+* Question bookmarking
+
+### 🔸 Soon After
+
+* Category filters (history, government, geography)
+* Progress bar
+* Dark mode
+* Shuffle multiple-choice answers
+
+### 🔹 Eventually
+
+* Stats dashboard for mock exam history
+* Keyboard shortcuts (`1–4`, `Enter`)
+* Sound effects for correct/incorrect answers
+* Swipe navigation on mobile
+* Custom quiz lengths (`10`, `20`, `50`, or all `200`)
+* Unit tests for quiz logic and shuffle function
 
 ---
+
+## 🎯 Why I Built This
+
+I’m preparing for my **Canadian citizenship exam** and wanted a real project to learn **JavaScript** with. It started as a learning exercise and turned into a tool I actually use to study — and something I can keep improving as I grow as a developer.
