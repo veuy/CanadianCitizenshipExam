@@ -8,7 +8,6 @@ const FILES_TO_CACHE = [
     'css/app.css',
     'js/app.js',
     'data/questions.js',
-    'manifest.json'
 ];
 
 // INSTALL event — fires when the service worker is first installed
