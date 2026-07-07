@@ -8,6 +8,9 @@ let mockExamAnswers = [];
 let mockExamCurrentIndex = 0;
 let mockExamTimer = null;
 let mockExamTimeLeft = 0;
+let allQuestionsAnswers = [];
+let wrongReviewQuestions = [];
+let wrongReviewCurrentIndex = 0;
 
 function renderScreen() {
   if (currentScreen === 'dashboard') {
@@ -16,6 +19,7 @@ function renderScreen() {
       shuffleQuestions();
       currentQuestionIndex = 0;
       score = 0;
+      allQuestionsAnswers = [];
       showAllQuestions();
   } else if (currentScreen === 'mockExam') {
       setupMockExam();
@@ -24,6 +28,9 @@ function renderScreen() {
       showMockExamReview();
   } else if (currentScreen === 'mockExamResults') {
       showMockExamResults();
+  } else if (currentScreen === 'wrongAnswerReview') {
+        setupWrongAnswerReview();
+        showWrongAnswerQuestion();
   }
 }
 
@@ -114,6 +121,12 @@ function handleAllQuestionAnswer(event) {
         buttons[question.correctAnswer].style.backgroundColor = '#8bc34a';
     }
 
+    allQuestionsAnswers.push({
+        question: question,
+        selectedAnswer: selectedIndex,
+        isCorrect: selectedIndex === question.correctAnswer
+    });
+
     document.getElementById('feedback').innerHTML += `<br><small>${question.explanation}</small>`;
 
     setTimeout(() => {
@@ -133,6 +146,8 @@ function nextAllQuestion() {
         showAllQuestions();
     } else {
         const app = document.getElementById('app');
+        const wrongCount = allQuestionsAnswers.filter(a => !a.isCorrect).length;
+        
         app.innerHTML = `
             <div class="nav-bar">
                 <button class="home-btn" id="btn-home-results">🏠 Home</button>
@@ -143,6 +158,7 @@ function nextAllQuestion() {
             <p class="results-text">Percentage: ${Math.round((score / questions.length) * 100)}%</p>
             <div class="results-buttons">
                 <button class="dashboard-btn" id="btn-try-again">Try Again</button>
+                ${wrongCount > 0 ? `<button class="dashboard-btn review-btn" id="btn-review-wrong">🔄 Review ${wrongCount} Wrong Answers</button>` : ''}
                 <button class="dashboard-btn" id="btn-home-again">Back to Dashboard</button>
             </div>
         `;
@@ -159,6 +175,15 @@ function nextAllQuestion() {
             currentScreen = 'allQuestions';
             renderScreen();
         });
+        if (wrongCount > 0) {
+            document.getElementById('btn-review-wrong').addEventListener('click', () => {
+                wrongReviewQuestions = allQuestionsAnswers.filter(a => !a.isCorrect).map(a => a.question);
+                wrongReviewCurrentIndex = 0;
+                score = 0;
+                currentScreen = 'wrongAnswerReview';
+                showWrongAnswerQuestion();
+            });
+        }
     }
 }
 
@@ -476,6 +501,7 @@ function showMockExamResults() {
         }
     }
     const passed = correctCount >= 15;
+    const wrongCount = 20 - correctCount;
 
     let resultsHTML = '';
     for (let i = 0; i < mockExamQuestions.length; i++) {
@@ -517,6 +543,8 @@ function showMockExamResults() {
         ${resultsHTML}
         <div class="results-buttons">
             <button class="dashboard-btn" id="btn-retry-mock">Try New Mock Exam</button>
+            ${wrongCount > 0 ? `<button class="dashboard-btn review-btn" id="btn-review-mock-wrong">🔄 Review ${wrongCount} Wrong Answers</button>` : ''}
+            <button class="dashboard-btn" id="btn-home-mock-results">Back to Dashboard</button>
         </div>
     `;
 
@@ -525,10 +553,158 @@ function showMockExamResults() {
         renderScreen();
     });
 
+    document.getElementById('btn-home-mock-results').addEventListener('click', () => {
+        currentScreen = 'dashboard';
+        renderScreen();
+    });
+
     document.getElementById('btn-retry-mock').addEventListener('click', () => {
         currentScreen = 'mockExam';
         renderScreen();
     });
+
+    if (wrongCount > 0) {
+        document.getElementById('btn-review-mock-wrong').addEventListener('click', () => {
+            wrongReviewQuestions = mockExamAnswers.filter(a => !a.isCorrect).map(a => a.question);
+            wrongReviewCurrentIndex = 0;
+            score = 0;
+            currentScreen = 'wrongAnswerReview';
+            showWrongAnswerQuestion();
+        });
+    }
+}
+
+/* ──────────────────────────────────────────
+   WRONG ANSWER REVIEW MODE
+   ────────────────────────────────────────── */
+
+// STEP 1: Filter wrong answers from the answer sheet
+function setupWrongAnswerReview() {
+    // Decide which answer sheet to use
+    // If coming from All Questions, use allQuestionsAnswers
+    // If coming from Mock Exam, use mockExamAnswers
+    let answersToReview;
+
+    if (allQuestionsAnswers.length > 0) {
+        answersToReview = allQuestionsAnswers;
+    } else {
+        answersToReview = mockExamAnswers;
+    }
+
+    // filter() creates a new array with only items where the arrow function returns true
+    const wrongAnswers = answersToReview.filter(a => !a.isCorrect);
+
+    // map() transforms each wrong answer's question object into the wrongReviewQuestions array
+    wrongReviewQuestions = wrongAnswers.map(a => a.question);
+
+    wrongReviewCurrentIndex = 0;
+    score = 0; // Reset score for this review session
+}
+
+// STEP 2: Show one wrong-answer question (same format as All Questions)
+function showWrongAnswerQuestion() {
+    const question = wrongReviewQuestions[wrongReviewCurrentIndex];
+    const app = document.getElementById('app');
+
+    app.innerHTML = `
+        <div class="nav-bar">
+            <button class="home-btn" id="btn-home-wrong">🏠 Home</button>
+            <span class="nav-title">Reviewing Wrong Answers</span>
+        </div>
+        <p class="progress">Question ${wrongReviewCurrentIndex + 1} of ${wrongReviewQuestions.length}</p>
+        <p class="question-text">${question.question}</p>
+        <div class="choices">
+            <button class="choice-btn" data-index="0">${question.choices[0]}</button>
+            <button class="choice-btn" data-index="1">${question.choices[1]}</button>
+            <button class="choice-btn" data-index="2">${question.choices[2]}</button>
+            <button class="choice-btn" data-index="3">${question.choices[3]}</button>
+        </div>
+        <p class="score-display">Correct in review: ${score}</p>
+        <p id="feedback"></p>
+    `;
+
+    document.getElementById('btn-home-wrong').addEventListener('click', () => {
+        currentScreen = 'dashboard';
+        renderScreen();
+    });
+
+    const buttons = document.querySelectorAll('.choice-btn');
+    for (let i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener('click', handleWrongAnswer);
+    }
+}
+
+// STEP 3: Handle clicking an answer in review mode
+function handleWrongAnswer(event) {
+    const selectedButton = event.target;
+    const selectedIndex = parseInt(selectedButton.dataset.index);
+    const question = wrongReviewQuestions[wrongReviewCurrentIndex];
+
+    const buttons = document.querySelectorAll('.choice-btn');
+    for (let i = 0; i < buttons.length; i++) {
+        buttons[i].disabled = true;
+    }
+
+    if (selectedIndex === question.correctAnswer) {
+        selectedButton.style.backgroundColor = '#8bc34a';
+        document.getElementById('feedback').textContent = '✅ Correct!';
+        score++;
+    } else {
+        selectedButton.style.backgroundColor = '#f44336';
+        document.getElementById('feedback').textContent = '❌ Incorrect';
+        buttons[question.correctAnswer].style.backgroundColor = '#8bc34a';
+    }
+
+    document.getElementById('feedback').innerHTML += `<br><small>${question.explanation}</small>`;
+
+    setTimeout(() => {
+        const app = document.getElementById('app');
+        const nextBtn = document.createElement('button');
+        nextBtn.textContent = 'Next Question →';
+        nextBtn.className = 'next-btn';
+        nextBtn.addEventListener('click', nextWrongAnswer);
+        app.appendChild(nextBtn);
+    }, 500);
+}
+
+// STEP 4: Move to the next wrong question, or finish
+function nextWrongAnswer() {
+    wrongReviewCurrentIndex++;
+
+    if (wrongReviewCurrentIndex < wrongReviewQuestions.length) {
+        showWrongAnswerQuestion();
+    } else {
+        // All wrong answers reviewed
+        const app = document.getElementById('app');
+        app.innerHTML = `
+            <div class="nav-bar">
+                <button class="home-btn" id="btn-home-wrong-done">🏠 Home</button>
+                <span class="nav-title">Review Complete</span>
+            </div>
+            <h2 class="results-title">🎉 Review Complete!</h2>
+            <p class="results-text">You reviewed ${wrongReviewQuestions.length} wrong answer(s).</p>
+            <p class="results-text">Got ${score} correct this time.</p>
+            <div class="results-buttons">
+                <button class="dashboard-btn" id="btn-review-again">Review Wrong Again</button>
+                <button class="dashboard-btn" id="btn-home-wrong-end">Back to Dashboard</button>
+            </div>
+        `;
+
+        document.getElementById('btn-home-wrong-done').addEventListener('click', () => {
+            currentScreen = 'dashboard';
+            renderScreen();
+        });
+        document.getElementById('btn-home-wrong-end').addEventListener('click', () => {
+            currentScreen = 'dashboard';
+            renderScreen();
+        });
+        document.getElementById('btn-review-again').addEventListener('click', () => {
+            // Reset and review the same wrong questions again
+            wrongReviewCurrentIndex = 0;
+            score = 0;
+            showWrongAnswerQuestion();
+        });
+    }
 }
 
 renderScreen();
