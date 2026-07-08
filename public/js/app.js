@@ -48,6 +48,7 @@ function renderDashboard() {
             <p class="dashboard-desc">Practice all 200 questions with instant feedback after each answer.</p>
             <button class="dashboard-btn" id="btn-mock">📝 Mock Exam</button>
             <p class="dashboard-desc">Simulate the real exam: 20 questions, no feedback until you submit.</p>
+            <div id="resume-section"></div>
         </div> 
     `;
 
@@ -60,6 +61,48 @@ function renderDashboard() {
         currentScreen = 'mockExam';
         renderScreen();
     });
+
+    // Show resume buttons if saved progress exists
+    const resumeSection = document.getElementById('resume-section');
+    const savedAll = localStorage.getItem('allQuestionsProgress');
+    const savedMock = localStorage.getItem('mockExamProgress');
+
+    if (savedAll || savedMock) {
+        let resumeHTML = '<hr class="resume-divider"><p class="resume-label">Resume</p>';
+
+        if (savedAll) {
+            const data = JSON.parse(savedAll);
+            resumeHTML += `
+                <button class="dashboard-btn resume-btn" id="btn-resume-all">
+                    📚 Resume All Questions (Q${data.currentQuestionIndex + 1} of ${data.questions.length})
+                </button>
+            `;
+        }
+
+        if (savedMock) {
+            const data = JSON.parse(savedMock);
+            const min = Math.floor(data.timeLeft / 60);
+            const sec = data.timeLeft % 60;
+            resumeHTML += `
+                <button class="dashboard-btn resume-btn" id="btn-resume-mock">
+                    📝 Resume Mock Exam (Q${data.currentIndex + 1} of 20, ${min}:${sec.toString().padStart(2, '0')} left)
+                </button>
+            `;
+        }
+
+        resumeSection.innerHTML = resumeHTML;
+
+        if (savedAll) {
+            document.getElementById('btn-resume-all').addEventListener('click', () => {
+                loadAllQuestionsProgress();
+            });
+        }
+        if (savedMock) {
+            document.getElementById('btn-resume-mock').addEventListener('click', () => {
+                loadMockExamProgress();
+            });
+        }
+    }
 }
 
 function shuffleQuestions() {
@@ -91,6 +134,7 @@ function showAllQuestions() {
     `;
 
     document.getElementById('btn-home-all').addEventListener('click', () => {
+        clearAllProgress();
         currentScreen = 'dashboard';
         renderScreen();
     });
@@ -127,6 +171,8 @@ function handleAllQuestionAnswer(event) {
         isCorrect: selectedIndex === question.correctAnswer
     });
 
+    saveAllQuestionsProgress();
+    
     document.getElementById('feedback').innerHTML += `<br><small>${question.explanation}</small>`;
 
     setTimeout(() => {
@@ -314,6 +360,7 @@ function showMockExamQuestion() {
     document.getElementById('btn-home-mock').addEventListener('click', () => {
         if (confirm('Leave the exam? Your answers will be lost.')) {
             stopMockExamTimer();
+            clearAllProgress();
             currentScreen = 'dashboard';
             renderScreen();
         }
@@ -375,6 +422,7 @@ function handleMockExamAnswer(event) {
 
     // Re-render to highlight the new selection
     showMockExamQuestion();
+    saveMockExamProgress();
 }
 
 function showMockExamEnd() {
@@ -491,6 +539,7 @@ function showMockExamReview() {
 
 function showMockExamResults() {
     stopMockExamTimer();
+    clearAllProgress();
     const app = document.getElementById('app');
     
 
@@ -565,7 +614,7 @@ function showMockExamResults() {
 
     if (wrongCount > 0) {
         document.getElementById('btn-review-mock-wrong').addEventListener('click', () => {
-            wrongReviewQuestions = mockExamAnswers.filter(a => !a.isCorrect).map(a => a.question);
+            wrongReviewQuestions = mockExamAnswers.filter(a => !a.isCorrect).map(a => mockExamQuestions[a.questionIndex]);
             wrongReviewCurrentIndex = 0;
             score = 0;
             currentScreen = 'wrongAnswerReview';
@@ -595,7 +644,10 @@ function setupWrongAnswerReview() {
     const wrongAnswers = answersToReview.filter(a => !a.isCorrect);
 
     // map() transforms each wrong answer's question object into the wrongReviewQuestions array
-    wrongReviewQuestions = wrongAnswers.map(a => a.question);
+    wrongReviewQuestions = wrongAnswers.map(a => {
+        if (a.question) return a.question;
+        return mockExamQuestions[a.questionIndex];
+    });
 
     wrongReviewCurrentIndex = 0;
     score = 0; // Reset score for this review session
@@ -706,5 +758,68 @@ function nextWrongAnswer() {
         });
     }
 }
+
+function saveAllQuestionsProgress () {
+    const data = {
+        currentQuestionIndex: currentQuestionIndex,
+        score: score,
+        questions: questions,
+        answers: allQuestionsAnswers
+    };
+    localStorage.setItem('allQuestionsProgress', JSON.stringify(data));
+}
+
+function saveMockExamProgress() {
+    const data = {
+        currentIndex: mockExamCurrentIndex,
+        questions: mockExamQuestions,
+        answers: mockExamAnswers,
+        timeLeft: mockExamTimeLeft
+    };
+    localStorage.setItem('mockExamProgress', JSON.stringify(data));
+}
+
+function clearAllProgress() {
+    localStorage.removeItem('allQuestionsProgress');
+    localStorage.removeItem('mockExamProgress');
+}
+
+function loadAllQuestionsProgress() {
+    const saved = localStorage.getItem('allQuestionsProgress');
+    if (!saved) return false;
+
+    const data = JSON.parse(saved);
+
+    // Restore the questions array in the correct order
+    // We copy the saved array back into the global questions variable
+    // (spread the saved array, also copy each question object to break reference)
+    for (let i = 0; i < data.questions.length; i++) {
+        questions[i] = data.questions[i];
+    }
+
+    currentQuestionIndex = data.currentQuestionIndex;
+    score = data.score;
+    allQuestionsAnswers = data.answers || [];
+    currentScreen = 'allQuestions';
+    showAllQuestions();
+    return true;
+}
+
+function loadMockExamProgress() {
+    const saved = localStorage.getItem('mockExamProgress');
+    if (!saved) return false;
+
+    const data = JSON.parse(saved);
+    mockExamQuestions = data.questions;
+    mockExamAnswers = data.answers;
+    mockExamCurrentIndex = data.currentIndex;
+    mockExamTimeLeft = data.timeLeft || 45 * 60;
+
+    startMockExamTimer();
+    currentScreen = 'mockExam';
+    showMockExamQuestion();
+    return true;
+}
+
 
 renderScreen();
