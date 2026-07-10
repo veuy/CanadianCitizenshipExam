@@ -453,3 +453,15 @@ h1 {
 .review-btn:hover {
     background: #bf360c;
 }
+
+.star-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px 8px;
+    line-height: 1;
+}
+.star-btn:hover {
+    transform: scale(1.2);
+}

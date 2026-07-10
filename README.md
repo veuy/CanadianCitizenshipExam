@@ -73,7 +73,7 @@ Built with **HTML, CSS, and JavaScript** to focus on learning the fundamentals.
 
 * Wrong-answer review mode ✅
 * Save progress with `localStorage` ✅
-* Question bookmarking
+* Question bookmarking ✅
 
 ### 🔸 Soon After
 

@@ -11,6 +11,11 @@ let mockExamTimeLeft = 0;
 let allQuestionsAnswers = [];
 let wrongReviewQuestions = [];
 let wrongReviewCurrentIndex = 0;
+let starredQuestionIds = [];
+const savedStarred = localStorage.getItem('starredQuestions');
+if (savedStarred) {
+    starredQuestionIds = JSON.parse(savedStarred);
+}
 
 function renderScreen() {
   if (currentScreen === 'dashboard') {
@@ -31,6 +36,9 @@ function renderScreen() {
   } else if (currentScreen === 'wrongAnswerReview') {
         setupWrongAnswerReview();
         showWrongAnswerQuestion();
+  } else if (currentScreen === 'starredQuestions') {
+        setupStarredQuestions();
+        showAllQuestions();
   }
 }
 
@@ -103,6 +111,23 @@ function renderDashboard() {
             });
         }
     }
+
+    if (starredQuestionIds.length > 0) {
+        const starSection = document.getElementById('resume-section');
+        const currentHTML = starSection.innerHTML;
+        starSection.innerHTML = currentHTML + `
+            <hr class="resume-divider">
+            <p class="resume-label">Saved</p>
+            <button class="dashboard-btn resume-btn" id="btn-starred-mode">
+                ⭐ Starred Questions (${starredQuestionIds.length})
+            </button>
+        `;
+
+        document.getElementById('btn-starred-mode').addEventListener('click', () => {
+            currentScreen = 'starredQuestions';
+            renderScreen();
+        });
+    }
 }
 
 function shuffleQuestions() {
@@ -115,11 +140,15 @@ function shuffleQuestions() {
 function showAllQuestions() {
     const question = questions[currentQuestionIndex];
     const app = document.getElementById('app');
+    const questionId = question.id;
+    const starIcon = isStarred(questionId) ? '⭐' : '☆';
+
 
     app.innerHTML = `
         <div class="nav-bar">
             <button class="home-btn" id="btn-home-all">🏠 Home</button>
             <span class="nav-title">All Questions</span>
+            <button class="star-btn" id="btn-star-all">${starIcon}</button>
         </div>
         <p class="progress">Question ${currentQuestionIndex + 1} of ${questions.length}</p>
         <p class="question-text">${question.question}</p>
@@ -134,9 +163,21 @@ function showAllQuestions() {
     `;
 
     document.getElementById('btn-home-all').addEventListener('click', () => {
+        if (window._originalQuestions) {
+            for (let i = 0; i < window._originalQuestions.length; i++) {
+                questions[i] = window._originalQuestions[i];
+            }
+            questions.length = window._originalQuestions.length;
+            window._originalQuestions = null;
+        }
         clearAllProgress();
         currentScreen = 'dashboard';
         renderScreen();
+    });
+
+    document.getElementById('btn-star-all').addEventListener('click', () => {
+        toggleStar(questionId);
+        showAllQuestions();
     });
 
     const buttons = document.querySelectorAll('.choice-btn');
@@ -295,6 +336,8 @@ function showMockExamQuestion() {
     const question = mockExamQuestions[mockExamCurrentIndex];
     const app = document.getElementById('app');
     const total = 20;
+    const questionId = question.id;
+    const starIcon = isStarred(questionId) ? '⭐' : '☆';
     const timerMinutes = Math.floor(mockExamTimeLeft / 60);
     const timerSeconds = mockExamTimeLeft % 60;
     const timerDisplay = `${timerMinutes}:${timerSeconds.toString().padStart(2, '0')}`;
@@ -341,6 +384,7 @@ function showMockExamQuestion() {
         <div class="nav-bar">
             <button class="home-btn" id="btn-home-mock">🏠 Home</button>
             <span class="nav-title">Mock Exam</span>
+            <button class="star-btn" id="btn-star-mock">${starIcon}</button>
             <span class="mock-timer" id="mock-timer">${timerDisplay}</span>
         </div>
         <p class="progress">Question ${mockExamCurrentIndex + 1} of ${total}</p>
@@ -364,6 +408,11 @@ function showMockExamQuestion() {
             currentScreen = 'dashboard';
             renderScreen();
         }
+    });
+
+    document.getElementById('btn-star-mock').addEventListener('click', () => {
+        toggleStar(questionId);
+        showMockExamQuestion();
     });
 
     // Choice buttons — select answer
@@ -821,5 +870,38 @@ function loadMockExamProgress() {
     return true;
 }
 
+function isStarred(questionId) {
+    return starredQuestionIds.includes(questionId);
+}
+
+function toggleStar(questionId) {
+    if (isStarred(questionId)) {
+        // Remove from starred list
+        const index = starredQuestionIds.indexOf(questionId);
+        starredQuestionIds.splice(index, 1);
+    } else {
+        // Add to starred list
+        starredQuestionIds.push(questionId);
+    }
+    // Save to localStorage
+    localStorage.setItem('starredQuestions', JSON.stringify(starredQuestionIds));
+}
+
+function setupStarredQuestions() {
+    const starredQuestions = questions.filter(q => starredQuestionIds.includes(q.id));
+    window._originalQuestions = questions;
+    const newQuestions = [];
+    for (let i = 0; i < starredQuestions.length; i++) {
+        newQuestions[i] = starredQuestions[i];
+    }
+    for (let i = 0; i < newQuestions.length; i++) {
+        questions[i] = newQuestions[i];
+    }
+    questions.length = newQuestions.length;
+    currentQuestionIndex = 0;
+    score = 0;
+    allQuestionsAnswers = [];
+    shuffleQuestions();
+}
 
 renderScreen();
