@@ -48,6 +48,7 @@ function renderDashboard() {
     app.innerHTML = `
         <div class="nav-bar">
             <span class="nav-title">Canadian Citizenship Exam</span>
+            <button class="dm-toggle" id="dm-dash" style="margin-left:auto;">🌙</button>
         </div>
         <div class="dashboard">
             <h2>Welcome!</h2>
@@ -149,6 +150,7 @@ function showAllQuestions() {
             <button class="home-btn" id="btn-home-all">🏠 Home</button>
             <span class="nav-title">All Questions</span>
             <button class="star-btn" id="btn-star-all">${starIcon}</button>
+            <button class="dm-toggle" id="dm-all" style="margin-left:auto;">🌙</button>
         </div>
         <p class="progress">Question ${currentQuestionIndex + 1} of ${questions.length}</p>
         <p class="question-text">${question.question}</p>
@@ -386,6 +388,7 @@ function showMockExamQuestion() {
             <span class="nav-title">Mock Exam</span>
             <button class="star-btn" id="btn-star-mock">${starIcon}</button>
             <span class="mock-timer" id="mock-timer">${timerDisplay}</span>
+            <button class="dm-toggle" id="dm-mock">🌙</button>
         </div>
         <p class="progress">Question ${mockExamCurrentIndex + 1} of ${total}</p>
         <p class="question-text">${question.question}</p>
@@ -904,4 +907,38 @@ function setupStarredQuestions() {
     shuffleQuestions();
 }
 
+/* ──────── DARK MODE ──────── */
+
+function initDarkMode() {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const storedTheme = localStorage.getItem('darkMode');
+    
+    if (storedTheme === 'true' || (storedTheme === null && prefersDark)) {
+        document.body.classList.add('dark-mode');
+    }
+    updateAllDmIcons();
+}
+
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    updateAllDmIcons();
+}
+
+function updateAllDmIcons() {
+    const isDark = document.body.classList.contains('dark-mode');
+    const icons = document.querySelectorAll('.dm-toggle');
+    for (let i = 0; i < icons.length; i++) {
+        icons[i].textContent = isDark ? '☀️' : '🌙';
+    }
+}
+
+// Event delegation for dark mode toggle buttons
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('dm-toggle')) {
+        toggleDarkMode();
+    }
+});
+
+initDarkMode();
 renderScreen();

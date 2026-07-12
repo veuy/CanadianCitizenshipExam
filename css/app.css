@@ -4,31 +4,68 @@
   box-sizing: border-box;
 }
 
+:root {
+  --bg: #f5f5f5;
+  --card-bg: white;
+  --card-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  --text: #333;
+  --text-light: #666;
+  --text-muted: #888;
+  --text-faded: #999;
+  --border: #ddd;
+  --btn-bg: #f0f0f0;
+  --btn-hover: #e0e0e0;
+  --nav-divider: #eee;
+  --red: #c00;
+  --red-hover: #900;
+  --review-card: #fafafa;
+  --review-border: #e0e0e0;
+  --white: white;
+}
+
+body.dark-mode {
+  --bg: #1a1a1a;
+  --card-bg: #2d2d2d;
+  --card-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  --text: #eee;
+  --text-light: #aaa;
+  --text-muted: #888;
+  --text-faded: #777;
+  --border: #444;
+  --btn-bg: #3a3a3a;
+  --btn-hover: #4a4a4a;
+  --nav-divider: #333;
+  --red: #ff4444;
+  --red-hover: #cc0000;
+  --review-card: #333;
+  --review-border: #444;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background-color: #f5f5f5;
-  color: #333;
+  background-color: var(--bg);
+  color: var(--text);
   padding: 20px;
 }
 
 #app {
   max-width: 600px;
   margin: 0 auto;
-  background: white;
+  background: var(--card-bg);
   border-radius: 12px;
   padding: 24px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--card-shadow);
 }
 
 h1 {
   font-size: 24px;
-  color: #c00;
+  color: var(--red);
   margin-bottom: 16px;
 }
 
 .progress {
   font-size: 14px;
-  color: #666;
+  color: var(--text-light);
   margin-bottom: 10px;
 }
 
@@ -46,8 +83,9 @@ h1 {
 }
 
 .choice-btn {
-  background: #f0f0f0;
-  border: 2px solid #ddd;
+  background: var(--btn-bg);
+  color: var(--text);
+  border: 2px solid var(--border);
   border-radius: 8px;
   padding: 14px;
   font-size: 16px;
@@ -57,19 +95,19 @@ h1 {
 }
 
 .choice-btn:hover {
-  background: #e0e0e0;
+  background: var(--btn-hover);
 }
 
 .score-display {
   margin-top: 20px;
   font-size: 16px;
-  color: #c00;
+  color: var(--red);
   font-weight: bold;
 }
 
 .next-btn {
-  background-color: #c00;
-  color: white;
+  background-color: var(--red);
+  color: var(--white);
   border: none;
   border-radius: 8px;
   padding: 14px 24px;
@@ -81,7 +119,7 @@ h1 {
 }
 
 .next-btn:hover {
-  background: #900;
+  background: var(--red-hover);
 }
 
 #feedback {
@@ -101,17 +139,17 @@ h1 {
     gap: 12px;
     margin-bottom: 20px;
     padding-bottom: 12px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--nav-divider);
 }
 
 .nav-title {
     font-size: 16px;
     font-weight: bold;
-    color: #c00;
+    color: var(--red);
 }
 
 .home-btn {
-    background: #f0f0f0;
+    background: var(--btn-bg);
     border: none;
     border-radius: 6px;
     padding: 8px 14px;
@@ -120,7 +158,7 @@ h1 {
 }
 
 .home-btn:hover {
-    background: #e0e0e0;
+    background: var(--btn-hover);
 }
 
 /* ──────── DASHBOARD ──────── */
@@ -131,18 +169,18 @@ h1 {
 
 .dashboard h2 {
     font-size: 28px;
-    color: #333;
+    color: var(--text);
     margin-bottom: 8px;
 }
 
 .dashboard-subtitle {
-    color: #666;
+    color: var(--text-light);
     margin-bottom: 24px;
 }
 
 .dashboard-btn {
-    background: #c00;
-    color: white;
+    background: var(--red);
+    color: var(--white);
     border: none;
     border-radius: 10px;
     padding: 16px 32px;
@@ -154,12 +192,12 @@ h1 {
 }
 
 .dashboard-btn:hover {
-    background: #900;
+    background: var(--red-hover);
 }
 
 .dashboard-desc {
     font-size: 13px;
-    color: #888;
+    color: var(--text-muted);
     margin-bottom: 20px;
 }
 
@@ -167,14 +205,14 @@ h1 {
 
 .results-title {
     font-size: 28px;
-    color: #333;
+    color: var(--text);
     margin-bottom: 16px;
     text-align: center;
 }
 
 .results-text {
     font-size: 18px;
-    color: #555;
+    color: var(--text-light);
     margin-bottom: 8px;
     text-align: center;
 }
@@ -192,19 +230,19 @@ h1 {
 
 .mock-end h2 {
     font-size: 28px;
-    color: #333;
+    color: var(--text);
     margin-bottom: 12px;
 }
 
 .mock-end-text {
     font-size: 18px;
-    color: #555;
+    color: var(--text-light);
     margin-bottom: 6px;
 }
 
 .mock-end-hint {
     font-size: 14px;
-    color: #888;
+    color: var(--text-muted);
     margin-bottom: 24px;
 }
 
@@ -217,8 +255,8 @@ h1 {
 /* ──────── REVIEW CARDS ──────── */
 
 .review-card {
-    background: #fafafa;
-    border: 1px solid #e0e0e0;
+    background: var(--review-card);
+    border: 1px solid var(--review-border);
     border-radius: 8px;
     padding: 14px;
     margin-bottom: 12px;
@@ -227,32 +265,32 @@ h1 {
 .review-q-number {
     font-size: 13px;
     font-weight: bold;
-    color: #c00;
+    color: var(--red);
     margin-bottom: 4px;
 }
 
 .review-q-text {
     font-size: 15px;
-    color: #333;
+    color: var(--text);
     margin-bottom: 6px;
     line-height: 1.4;
 }
 
 .review-your-answer {
     font-size: 14px;
-    color: #666;
+    color: var(--text-light);
     font-style: italic;
 }
 
 .review-hint {
     font-size: 13px;
-    color: #888;
+    color: var(--text-muted);
     margin-bottom: 16px;
     text-align: center;
 }
 
 .not-answered {
-    color: #999;
+    color: var(--text-faded);
 }
 
 /* ──────── RESULTS ──────── */
@@ -267,14 +305,14 @@ h1 {
 
 .result-correct-answer {
     font-size: 14px;
-    color: #2e7d32;
+    color: var(--red);
     font-weight: bold;
     margin-bottom: 2px;
 }
 
 .result-explanation {
     font-size: 13px;
-    color: #777;
+    color: var(--text-light);
     margin-top: 4px;
     line-height: 1.4;
 }
@@ -287,8 +325,8 @@ h1 {
 
 .mock-nav-btn {
     flex: 1;
-    background: #f0f0f0;
-    border: 2px solid #ddd;
+    background: var(--btn-bg);
+    border: 2px solid var(--border);
     border-radius: 8px;
     padding: 12px;
     font-size: 16px;
@@ -297,23 +335,23 @@ h1 {
 }
 
 .mock-nav-btn:hover {
-    background: #e0e0e0;
+    background: var(--btn-hover);
 }
 
 .mock-finish-btn {
-    background: #c00;
-    color: white;
-    border-color: #c00;
+    background: var(--red);
+    color: var(--white);
+    border-color: var(--red);
 }
 
 .mock-finish-btn:hover {
-    background: #900;
+    background: var(--red-hover);
 }
 
 .mock-answered-count {
     margin-top: 12px;
     font-size: 13px;
-    color: #888;
+    color: var(--text-muted);
     text-align: center;
 }
 
@@ -324,49 +362,12 @@ h1 {
     border-color: #1976d2 !important;
 }
 
-/* ──────── MOCK EXAM END ──────── */
-
-.mock-end {
-    text-align: center;
-}
-
-.mock-end h2 {
-    font-size: 28px;
-    color: #333;
-    margin-bottom: 12px;
-}
-
-.mock-end-text {
-    font-size: 18px;
-    color: #555;
-    margin-bottom: 6px;
-}
-
-.mock-end-warning {
-    font-size: 15px;
-    color: #e65100;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.mock-end-hint {
-    font-size: 14px;
-    color: #888;
-    margin-bottom: 24px;
-}
-
-.mock-end-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
 /* ──────── REVIEW ──────── */
 
 .review-edit-btn {
     background: none;
-    border: 1px solid #c00;
-    color: #c00;
+    border: 1px solid var(--red);
+    color: var(--red);
     border-radius: 4px;
     padding: 4px 10px;
     font-size: 13px;
@@ -375,8 +376,8 @@ h1 {
 }
 
 .review-edit-btn:hover {
-    background: #c00;
-    color: white;
+    background: var(--red);
+    color: var(--white);
 }
 
 .review-bottom-buttons {
@@ -392,7 +393,7 @@ h1 {
     margin-left: auto;
     font-size: 16px;
     font-weight: bold;
-    color: #333;
+    color: var(--text);
     font-variant-numeric: tabular-nums;
 }
 
@@ -401,7 +402,7 @@ h1 {
 }
 
 .timer-danger {
-    color: #c00 !important;
+    color: var(--red) !important;
     animation: timer-blink 1s infinite;
 }
 
@@ -414,14 +415,14 @@ h1 {
 
 .resume-divider {
     border: none;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid var(--border);
     margin: 20px 0 12px 0;
 }
 
 .resume-label {
     font-size: 14px;
     font-weight: bold;
-    color: #666;
+    color: var(--text-light);
     text-transform: uppercase;
     letter-spacing: 1px;
     margin-bottom: 10px;
@@ -438,8 +439,8 @@ h1 {
 /* ──────── WRONG ANSWER REVIEW ──────── */
 
 .review-btn {
-    background: #e65100;
-    color: white;
+    background: var(--red);
+    color: var(--white);
     border: none;
     border-radius: 10px;
     padding: 16px 32px;
@@ -463,5 +464,19 @@ h1 {
     line-height: 1;
 }
 .star-btn:hover {
+    transform: scale(1.2);
+}
+
+/* ──────── DARK MODE TOGGLE ──────── */
+
+.dm-toggle {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px 8px;
+    line-height: 1;
+}
+.dm-toggle:hover {
     transform: scale(1.2);
 }
