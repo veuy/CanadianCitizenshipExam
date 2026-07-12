@@ -79,7 +79,7 @@ Built with **HTML, CSS, and JavaScript** to focus on learning the fundamentals.
 
 * Category filters (history, government, geography)
 * Progress bar
-* Dark mode
+* Dark mode ✅
 * Shuffle multiple-choice answers
 
 ### 🔹 Eventually
